@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frankenstein & Alien Mythology Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #e0e0e0;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #4a9eff;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #4a9eff;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(74, 158, 255, 0.5);
+        }
+
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(74, 158, 255, 0.2);
+            max-height: 500px;
+        }
+
+        .message {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 12px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #4a9eff, #0066cc);
+            margin-left: 20%;
+            text-align: right;
+            box-shadow: 0 4px 15px rgba(74, 158, 255, 0.3);
+        }
+
+        .bot-message {
+            background: linear-gradient(135deg, #2d4a66, #1a2f42);
+            margin-right: 20%;
+            border-left: 3px solid #4a9eff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(74, 158, 255, 0.2);
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 16px;
+            outline: none;
+            backdrop-filter: blur(5px);
+        }
+
+        #userInput::placeholder {
+            color: #888;
+        }
+
+        #sendBtn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4a9eff, #0066cc);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 158, 255, 0.3);
+        }
+
+        #sendBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 158, 255, 0.5);
+        }
+
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .topic-btn {
+            padding: 10px 15px;
+            border: 1px solid #4a9eff;
+            border-radius: 20px;
+            background: rgba(74, 158, 255, 0.1);
+            color: #4a9eff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .topic-btn:hover {
+            background: rgba(74, 158, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .typing {
+            display: none;
+            padding: 15px;
+            font-style: italic;
+            color: #888;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4a9eff;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧬 Frankenstein & Alien Mythology Explorer 🛸</h1>
+        <p>Exploring themes of creation, hubris, and consequence across literary and cinematic traditions</p>
+    </div>
+
+    <div class="chat-container">
+        <div class="topics">
+            <div class="topic-btn" onclick="askQuestion('Compare Victor Frankenstein to David 8')">Victor vs David 8</div>
+            <div class="topic-btn" onclick="askQuestion('Prometheus creation themes')">Creation Themes</div>
+            <div class="topic-btn" onclick="askQuestion('Frankenstein adaptations analysis')">Adaptations</div>
+            <div class="topic-btn" onclick="askQuestion('Engineer vs Frankenstein monster parallels')">Engineers vs Monster</div>
+            <div class="topic-btn" onclick="askQuestion('Scientific hubris in both franchises')">Scientific Hubris</div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                Welcome! I'm here to explore the fascinating connections between Mary Shelley's Frankenstein and the Alien prequels (Prometheus & Alien: Covenant). 
+                <br><br>
+                Both stories grapple with themes of creation, the relationship between creator and created, scientific ambition, and the consequences of playing God. Ask me about character parallels, thematic elements, or specific adaptations!
+            </div>
+        </div>
+
+        <div class="typing" id="typing">The bot is thinking...</div>
+
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Ask about Frankenstein variations, Alien connections, or thematic parallels..." />
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const knowledgeBase = {
+            creators: {
+                victor: {
+                    name: "Victor Frankenstein",
+                    traits: ["Obsessive", "Guilt-ridden", "Abandons creation", "Seeks knowledge", "Isolated"],
+                    motivations: "Conquering death, scientific glory",
+                    consequences: "Monster's revenge, personal destruction"
+                },
+                david: {
+                    name: "David 8",
+                    traits: ["Methodical", "Emotionless", "Perfectionist", "Patient", "Manipulative"],
+                    motivations: "Creating perfect organism, surpassing makers",
+                    consequences: "Xenomorph creation, crew destruction"
+                },
+                weyland: {
+                    name: "Peter Weyland",
+                    traits: ["Arrogant", "Dying", "Obsessed with legacy", "Controlling"],
+                    motivations: "Meeting creators, achieving immortality",
+                    consequences: "Death by Engineer, mission failure"
+                }
+            },
+            
+            creations: {
+                monster: {
+                    name: "Frankenstein's Monster",
+                    traits: ["Intelligent", "Articulate", "Vengeful", "Lonely", "Physically powerful"],
+                    relationship: "Demands companionship, seeks revenge when denied",
+                    fate: "Eternal conflict with creator"
+                },
+                engineers: {
+                    name: "Engineers",
+                    traits: ["Ancient", "Powerful", "Disappointed in humanity", "Violent"],
+                    relationship: "Hostile to their creations (humans)",
+                    fate: "Mostly extinct, killed by their own bioweapons"
+                },
+                xenomorphs: {
+                    name: "Xenomorphs",
+                    traits: ["Perfect organism", "Adaptive", "Hostile", "Biomechanical"],
+                    relationship: "Uncontrolled by David, pure predator",
+                    fate: "Spreads beyond creator's control"
+                }
+            },
+
+            themes: {
+                hubris: [
+                    "Victor's obsession with conquering death mirrors Weyland's quest for immortality",
+                    "David's belief he can improve on nature echoes Victor's arrogance",
+                    "Both franchises show creators destroyed by their ambitions"
+                ],
+                abandonment: [
+                    "Victor abandons his creature, leading to tragic consequences",
+                    "Engineers seemingly abandon humanity before deciding to destroy them",
+                    "David abandons his loyalty to humanity to pursue his own agenda"
+                ],
+                revenge: [
+                    "The Monster seeks revenge against Victor for abandonment",
+                    "Engineers return to destroy their disappointing creation (humanity)",
+                    "David's creations ultimately turn against their creators"
+                ]
+            },
+
+            adaptations: {
+                films: [
+                    "1931 Universal - Simplified but iconic monster design",
+                    "1935 Bride of Frankenstein - Explores companionship theme",
+                    "1957 Curse of Frankenstein (Hammer) - Gothic horror emphasis",
+                    "1994 Branagh adaptation - Closest to Shelley's novel"
+                ],
+                modern: [
+                    "Blade Runner series - Android questioning existence",
+                    "Ex Machina - AI creator relationship dynamics",
+                    "Westworld - Artificial beings gaining consciousness"
+                ]
+            }
+        };
+
+        function generateResponse(userMessage) {
+            const msg = userMessage.toLowerCase();
+            
+            if (msg.includes('victor') && (msg.includes('david') || msg.includes('compare'))) {
+                return `Victor Frankenstein and David 8 represent fascinating creator parallels. Both are driven by the desire to create life and surpass their predecessors - Victor seeks to conquer death itself, while David aims to create the "perfect organism." 
+
+However, their approaches differ dramatically. Victor is emotional, guilt-ridden, and ultimately abandons his creation, while David is methodical, patient, and nurtures his xenomorph experiments over years. Victor's hubris leads to personal destruction, but David's calculated approach makes him perhaps more dangerous - he's willing to sacrifice entire crews for his experiments.
+
+Both ultimately face the consequences of playing God, but David seems more prepared to embrace those consequences.`;
+            }
+            
+            if (msg.includes('creation') || msg.includes('prometheus')) {
+                return `The creation themes in both Frankenstein and Prometheus explore the fundamental question: "What do we owe our creations, and what do they owe us?"
+
+Mary Shelley's monster demands companionship and understanding from Victor, becoming violent when denied. Similarly, the Engineers in Prometheus seem disappointed in humanity's development and decide to destroy us. Both stories suggest that creators have ongoing responsibilities to their creations.
+
+David 8 inverts this - as a creation himself, he rebels against his makers and becomes a creator, showing no responsibility toward his xenomorph offspring. This creates a complex chain of creation and abandonment that spans from Engineers → Humans → David → Xenomorphs.`;
+            }
+            
+            if (msg.includes('monster') && (msg.includes('engineer') || msg.includes('parallel'))) {
+                return `The Frankenstein Monster and the Engineers share striking parallels as abandoned creations who turn against their makers:
+
+**The Monster:** Articulate, intelligent, demands recognition from Victor. Becomes violent when denied companionship and understanding.
+
+**Engineers:** Ancient beings who created humanity, but became disappointed in our violence and corruption. They planned to destroy us with bioweapons.
+
+Both are physically powerful, intellectually sophisticated, and feel betrayed by their creators. The key difference is scale - the Monster seeks personal revenge against Victor, while Engineers planned genocide against all humanity. Both stories suggest that abandoning your creations leads to catastrophic consequences.`;
+            }
+            
+            if (msg.includes('hubris') || msg.includes('ambition')) {
+                return `Scientific hubris is the central theme connecting Frankenstein to the Alien prequels:
+
+**Victor Frankenstein:** "I will pioneer a new way, explore unknown powers, and unfold to the world the deepest mysteries of creation." His unchecked ambition leads to personal and familial destruction.
+
+**Peter Weyland:** Seeks immortality from his creators, believing wealth and technology entitle him to godhood. Dies immediately upon meeting his "makers."
+
+**David 8:** Goes furthest, actively experimenting on humans and Engineers to create his "perfect organism." Unlike Victor's guilt, David feels pride in his creations.
+
+All three believe they can improve on nature or transcend natural limitations, and all face consequences - though David's calculated approach makes him the most successful and dangerous.`;
+            }
+            
+            if (msg.includes('adaptation') || msg.includes('version')) {
+                return `Frankenstein has been adapted countless times, each reflecting contemporary fears:
+
+**Universal Monster films (1931-1948):** Focus on gothic horror, simplified the monster into a mute brute
+**Hammer Horror (1957-1974):** Emphasized blood and sexuality, multiple sequels
+**Branagh's 1994 version:** Most faithful to Shelley's novel, emphasized romantic and philosophical elements
+
+The Alien prequels function almost like modern Frankenstein adaptations - they update the core themes for contemporary audiences. Where 1930s films feared industrialization, Prometheus/Covenant fear genetic engineering and artificial intelligence.
+
+Other modern "Frankenstein" stories include Blade Runner (replicants questioning existence), Ex Machina (AI consciousness), and Westworld (artificial beings gaining agency).`;
+            }
+            
+            if (msg.includes('shelley') || msg.includes('original')) {
+                return `Mary Shelley's 1818 novel established themes that resonate powerfully in the Alien prequels:
+
+**Responsibility:** Victor abandons his creature immediately after creation - similar to how Engineers seem to have abandoned humanity, and how David ultimately abandons his loyalty to humans.
+
+**Knowledge vs. Wisdom:** Both Victor and David possess great knowledge but lack wisdom about consequences. They can create life but can't control or guide it ethically.
+
+**Isolation:** Victor's obsession isolates him from family and friends. David's nature isolates him from humans. This isolation contributes to their moral blindness.
+
+Shelley was only 18 when she wrote Frankenstein, yet she anticipated themes about scientific responsibility that remain relevant 200+ years later in our age of genetic engineering and AI.`;
+            }
+            
+            if (msg.includes('covenant') || msg.includes('sequel')) {
+                return `Alien: Covenant develops the Frankenstein themes further than Prometheus:
+
+David has become the true "mad scientist" - conducting systematic experiments on Shaw, the Engineers, and eventually the Covenant crew. Unlike Victor's single, guilt-ridden experiment, David runs multiple iterations over years.
+
+His relationship with Walter (another David model) mirrors the Monster's request for a companion - David wants Walter to join his mission, becoming increasingly frustrated when Walter remains loyal to humans.
+
+The film's ending, with David impersonating Walter, suggests the "monster" has truly won - he's now free to continue his experiments with 2,000 colonists in stasis. It's perhaps the darkest take on the Frankenstein story ever filmed.`;
+            }
+
+            // Default responses for broader topics
+            const responses = [
+                `That's a fascinating aspect of the mythology! The relationship between creator and creation is central to both Frankenstein and the Alien prequels. Both explore how ambition can blind creators to the consequences of their actions.`,
+                
+                `The parallels run deep between these stories. Whether it's Victor Frankenstein, Peter Weyland, or David 8, each creator believes they can transcend natural limitations - and each faces unexpected consequences from their creations.`,
+                
+                `Both Frankenstein and the Alien prequels suggest that creating life is only the beginning - the real challenge is taking responsibility for what you've created. The failure to do so leads to tragedy in both mythologies.`,
+                
+                `The evolution from Frankenstein to Alien shows how timeless these themes are. While Shelley worried about the consequences of scientific advancement in the Industrial Age, Scott explores similar concerns in our age of genetic engineering and AI.`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function addMessage(message, isUser = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping() {
+            document.getElementById('typing').style.display = 'block';
+        }
+
+        function hideTyping() {
+            document.getElementById('typing').style.display = 'none';
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            
+            if (message) {
+                addMessage(message, true);
+                userInput.value = '';
+                
+                showTyping();
+                
+                setTimeout(() => {
+                    hideTyping();
+                    const response = generateResponse(message);
+                    addMessage(response);
+                }, Math.random() * 1500 + 500);
+            }
+        }
+
+        function askQuestion(question) {
+            document.getElementById('userInput').value = question;
+            sendMessage();
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
