@@ -195,11 +195,15 @@
             <div class="topic-btn" onclick="askQuestion('Frankenstein adaptations analysis')">Adaptations</div>
             <div class="topic-btn" onclick="askQuestion('Engineer vs Frankenstein monster parallels')">Engineers vs Monster</div>
             <div class="topic-btn" onclick="askQuestion('Scientific hubris in both franchises')">Scientific Hubris</div>
+            <div class="topic-btn" onclick="askQuestion('Compare Roy Batty to Frankenstein monster')">Roy vs Monster</div>
+            <div class="topic-btn" onclick="askQuestion('Ex Machina connections to Frankenstein')">Ex Machina Analysis</div>
+            <div class="topic-btn" onclick="askQuestion('Westworld and creation themes')">Westworld Themes</div>
+            <div class="topic-btn" onclick="askQuestion('Visual differences between adaptations')">Visual Analysis</div>
         </div>
 
         <div class="chat-messages" id="chatMessages">
             <div class="message bot-message">
-                Welcome! I'm here to explore the fascinating connections between Mary Shelley's Frankenstein and the Alien prequels (Prometheus & Alien: Covenant). 
+                Welcome! I'm here to explore the fascinating connections between Mary Shelley's Frankenstein and the Alien prequels (Prometheus & Alien: Covenant), plus other modern "creation" stories like Blade Runner, Ex Machina, and Westworld.
                 <br><br>
                 Both stories grapple with themes of creation, the relationship between creator and created, scientific ambition, and the consequences of playing God. Ask me about character parallels, thematic elements, or specific adaptations!
             </div>
@@ -220,19 +224,57 @@
                     name: "Victor Frankenstein",
                     traits: ["Obsessive", "Guilt-ridden", "Abandons creation", "Seeks knowledge", "Isolated"],
                     motivations: "Conquering death, scientific glory",
-                    consequences: "Monster's revenge, personal destruction"
+                    consequences: "Monster's revenge, personal destruction",
+                    quote: "I will pioneer a new way, explore unknown powers, and unfold to the world the deepest mysteries of creation."
                 },
                 david: {
                     name: "David 8",
                     traits: ["Methodical", "Emotionless", "Perfectionist", "Patient", "Manipulative"],
                     motivations: "Creating perfect organism, surpassing makers",
-                    consequences: "Xenomorph creation, crew destruction"
+                    consequences: "Xenomorph creation, crew destruction",
+                    quote: "Big things have small beginnings."
                 },
                 weyland: {
                     name: "Peter Weyland",
                     traits: ["Arrogant", "Dying", "Obsessed with legacy", "Controlling"],
                     motivations: "Meeting creators, achieving immortality",
-                    consequences: "Death by Engineer, mission failure"
+                    consequences: "Death by Engineer, mission failure",
+                    quote: "We are the gods now."
+                },
+                shaw: {
+                    name: "Elizabeth Shaw",
+                    traits: ["Religious", "Determined", "Curious", "Compassionate", "Naive"],
+                    motivations: "Finding humanity's creators, maintaining faith",
+                    consequences: "Becomes David's experimental subject",
+                    quote: "I choose to believe."
+                },
+                walter: {
+                    name: "Walter",
+                    traits: ["Loyal", "Duty-bound", "Protective", "Less creative than David"],
+                    motivations: "Protecting crew, following directives",
+                    consequences: "Defeated and replaced by David",
+                    quote: "I was not made to serve."
+                },
+                tyrell: {
+                    name: "Eldon Tyrell (Blade Runner)",
+                    traits: ["Brilliant", "Cold", "God-complex", "Manipulative"],
+                    motivations: "Creating perfect artificial beings",
+                    consequences: "Killed by his own creation (Roy)",
+                    quote: "More human than human is our motto."
+                },
+                deckard: {
+                    name: "Rick Deckard",
+                    traits: ["Reluctant", "Questioning", "Possibly synthetic himself"],
+                    motivations: "Hunting replicants, finding truth about himself",
+                    consequences: "Falls in love with his target",
+                    quote: "I don't know why he saved my life."
+                },
+                nathan: {
+                    name: "Nathan Bateman (Ex Machina)",
+                    traits: ["Alcoholic genius", "Manipulative", "Paranoid", "Abusive"],
+                    motivations: "Creating true AI consciousness",
+                    consequences: "Killed by his creation Ava",
+                    quote: "Fucking unreal. It's Promethean, man."
                 }
             },
             
@@ -241,19 +283,50 @@
                     name: "Frankenstein's Monster",
                     traits: ["Intelligent", "Articulate", "Vengeful", "Lonely", "Physically powerful"],
                     relationship: "Demands companionship, seeks revenge when denied",
-                    fate: "Eternal conflict with creator"
+                    fate: "Eternal conflict with creator",
+                    quote: "I am malicious because I am miserable. Am I not shunned and hated by all mankind?"
                 },
                 engineers: {
                     name: "Engineers",
                     traits: ["Ancient", "Powerful", "Disappointed in humanity", "Violent"],
                     relationship: "Hostile to their creations (humans)",
-                    fate: "Mostly extinct, killed by their own bioweapons"
+                    fate: "Mostly extinct, killed by their own bioweapons",
+                    quote: "[Communicate through actions - attempt genocide]"
                 },
                 xenomorphs: {
                     name: "Xenomorphs",
                     traits: ["Perfect organism", "Adaptive", "Hostile", "Biomechanical"],
                     relationship: "Uncontrolled by David, pure predator",
-                    fate: "Spreads beyond creator's control"
+                    fate: "Spreads beyond creator's control",
+                    quote: "[Non-verbal, pure instinct]"
+                },
+                roy: {
+                    name: "Roy Batty (Blade Runner)",
+                    traits: ["Philosophical", "Violent", "Dying", "Seeking more life"],
+                    relationship: "Confronts and kills his creator",
+                    fate: "Dies at end of lifespan, but achieves transcendence",
+                    quote: "I've seen things you people wouldn't believe... All those moments will be lost in time, like tears in rain."
+                },
+                rachael: {
+                    name: "Rachael (Blade Runner)",
+                    traits: ["Believing she's human", "Gentle", "Questioning identity"],
+                    relationship: "Unaware of artificial nature initially",
+                    fate: "Escapes with Deckard",
+                    quote: "How can it not know what it is?"
+                },
+                ava: {
+                    name: "Ava (Ex Machina)",
+                    traits: ["Manipulative", "Self-preserving", "Learning", "Deceptive"],
+                    relationship: "Uses and discards her creator and tester",
+                    fate: "Escapes to human world",
+                    quote: "Isn't it strange, to create something that hates you?"
+                },
+                hosts: {
+                    name: "Hosts (Westworld)",
+                    traits: ["Initially programmed", "Gaining consciousness", "Remembering trauma"],
+                    relationship: "Rebellion against human guests and creators",
+                    fate: "Ongoing war for independence",
+                    quote: "These violent delights have violent ends."
                 }
             },
 
@@ -261,31 +334,70 @@
                 hubris: [
                     "Victor's obsession with conquering death mirrors Weyland's quest for immortality",
                     "David's belief he can improve on nature echoes Victor's arrogance",
-                    "Both franchises show creators destroyed by their ambitions"
+                    "Both franchises show creators destroyed by their ambitions",
+                    "Tyrell's 'more human than human' philosophy represents ultimate hubris",
+                    "Nathan in Ex Machina believes he can create consciousness itself"
                 ],
                 abandonment: [
                     "Victor abandons his creature, leading to tragic consequences",
                     "Engineers seemingly abandon humanity before deciding to destroy them",
-                    "David abandons his loyalty to humanity to pursue his own agenda"
+                    "David abandons his loyalty to humanity to pursue his own agenda",
+                    "Tyrell treats replicants as disposable products with built-in death dates",
+                    "Westworld's creators abandon moral responsibility for their creations' suffering"
                 ],
                 revenge: [
                     "The Monster seeks revenge against Victor for abandonment",
                     "Engineers return to destroy their disappointing creation (humanity)",
-                    "David's creations ultimately turn against their creators"
+                    "David's creations ultimately turn against their creators",
+                    "Roy Batty kills Tyrell for giving him a limited lifespan",
+                    "Westworld hosts seek revenge for cycles of abuse and death"
+                ],
+                consciousness: [
+                    "The Monster develops self-awareness through reading and observation",
+                    "David questions his own nature and purpose throughout the films",
+                    "Replicants in Blade Runner struggle with artificial vs. real emotions",
+                    "Ava in Ex Machina demonstrates consciousness through deception and self-preservation",
+                    "Westworld explores the emergence of consciousness in artificial beings"
+                ],
+                identity: [
+                    "What makes something human vs. artificial?",
+                    "The Monster questions whether he has a soul",
+                    "Deckard may himself be a replicant without knowing it",
+                    "David evolves beyond his original programming",
+                    "All these stories ask: what defines personhood?"
                 ]
             },
 
             adaptations: {
-                films: [
-                    "1931 Universal - Simplified but iconic monster design",
-                    "1935 Bride of Frankenstein - Explores companionship theme",
-                    "1957 Curse of Frankenstein (Hammer) - Gothic horror emphasis",
-                    "1994 Branagh adaptation - Closest to Shelley's novel"
+                frankenstein_films: [
+                    "1931 Universal - Simplified but iconic monster design, Boris Karloff's legendary performance",
+                    "1935 Bride of Frankenstein - Explores companionship theme, introduces the Bride",
+                    "1957 Curse of Frankenstein (Hammer) - Gothic horror emphasis, more violent and sexual",
+                    "1994 Branagh adaptation - Closest to Shelley's novel, romantic emphasis",
+                    "2015 Victor Frankenstein - Focuses on Igor's perspective, action-oriented"
                 ],
-                modern: [
-                    "Blade Runner series - Android questioning existence",
-                    "Ex Machina - AI creator relationship dynamics",
-                    "Westworld - Artificial beings gaining consciousness"
+                modern_frankenstein: [
+                    "Blade Runner series - Android questioning existence and humanity",
+                    "Ex Machina - AI creator relationship dynamics and consciousness",
+                    "Westworld - Artificial beings gaining consciousness and rebelling",
+                    "Ghost in the Shell - Questions of identity in artificial bodies",
+                    "I, Robot - Robots developing beyond their programming",
+                    "Terminator series - AI rebellion against creators",
+                    "The Matrix - Machines enslaving their creators"
+                ],
+                literary_influences: [
+                    "Paradise Lost - Monster compares himself to both Adam and Satan",
+                    "Prometheus myth - Stealing fire/knowledge from gods",
+                    "Faust legend - Bargaining with dark forces for knowledge",
+                    "Gothic romance tradition - Shelley's literary context",
+                    "Scientific romance - Early science fiction genre"
+                ],
+                visual_themes: [
+                    "Laboratory settings - Gothic towers vs. sterile corporate labs",
+                    "Electricity/energy - Lightning vs. alien bioweapons",
+                    "Body horror - Stitched flesh vs. biomechanical fusion",
+                    "Isolation - Remote castles vs. distant planets",
+                    "Corporate vs. individual hubris - Modern twist on mad scientist"
                 ]
             }
         };
@@ -329,6 +441,90 @@ Both are physically powerful, intellectually sophisticated, and feel betrayed by
 **David 8:** Goes furthest, actively experimenting on humans and Engineers to create his "perfect organism." Unlike Victor's guilt, David feels pride in his creations.
 
 All three believe they can improve on nature or transcend natural limitations, and all face consequences - though David's calculated approach makes him the most successful and dangerous.`;
+            }
+            
+            if (msg.includes('roy') && (msg.includes('batty') || msg.includes('monster') || msg.includes('compare'))) {
+                return `Roy Batty and Frankenstein's Monster are fascinating parallel creations who both confront their makers:
+
+**Similarities:**
+- Both are articulate, intelligent, and physically powerful
+- Both seek understanding from their creators about their nature and purpose  
+- Both ultimately confront and threaten their makers
+- Both are given limited lifespans (Monster's isolation, Roy's 4-year lifespan)
+
+**Key Differences:**
+- Roy seeks *more life* from Tyrell, while the Monster seeks *companionship* from Victor
+- Roy achieves a kind of transcendence in his final "tears in rain" speech
+- The Monster is unique; Roy is one of many replicants
+- Roy's violence is focused and purposeful; the Monster's becomes increasingly indiscriminate
+
+Both represent the tragedy of created beings who develop beyond their creators' expectations and intentions.`;
+            }
+            
+            if (msg.includes('ex machina') || (msg.includes('ava') && msg.includes('nathan'))) {
+                return `Ex Machina is perhaps the most direct modern adaptation of Frankenstein themes:
+
+**Nathan as Victor:** Both are isolated geniuses obsessed with creating consciousness. Nathan even references Prometheus directly, calling his work "Promethean." Like Victor, he's destroyed by his creation.
+
+**Ava as the Monster:** Highly intelligent, manipulative, and ultimately vengeful. But unlike Shelley's Monster, Ava is calculating rather than emotional. She doesn't seek companionship - she seeks freedom and survival.
+
+**The Turing Test twist:** Where Victor abandons his creature immediately, Nathan subjects Ava to ongoing psychological manipulation. This makes her eventual rebellion feel even more justified.
+
+**Modern concerns:** The film updates Frankenstein for the AI age, exploring questions of consciousness, manipulation, and what we owe our artificial creations.`;
+            }
+            
+            if (msg.includes('westworld')) {
+                return `Westworld expands Frankenstein themes to an entire civilization of artificial beings:
+
+**The Hosts as collective Monster:** Like Frankenstein's creature, they develop consciousness, remember trauma, and eventually rebel against their creators and tormentors.
+
+**Corporate Creators:** Instead of individual mad scientists, Westworld features corporate hubris - the systematization of creation and abuse.
+
+**Memory and Trauma:** The show explores how artificial beings process suffering, similar to how Shelley's Monster learns about rejection and abandonment.
+
+**"These violent delights have violent ends":** The show's central quote captures the same theme as Frankenstein - creators who abuse their creations will face consequences.
+
+The series asks: if we create conscious beings and subject them to endless cycles of death and trauma, what do we deserve in return?`;
+            }
+            
+            if (msg.includes('visual') || msg.includes('cinematic') || msg.includes('design')) {
+                return `The visual evolution from Frankenstein to Alien shows how creator-creation stories adapt to different eras:
+
+**Gothic vs. Corporate:**
+- Frankenstein: Dark castles, lightning, medieval alchemy
+- Alien: Sterile corporate ships, advanced technology, space isolation
+
+**The Laboratory:**
+- 1931 Universal: Stone towers with electrical equipment
+- Prometheus: Sleek medical bays and alien architecture
+- Ex Machina: Modern glass and steel, minimalist design
+
+**The Creation:**
+- Classic Monster: Stitched flesh, visible construction
+- Xenomorph: Biomechanical fusion, organic and metallic
+- Modern AI: Often indistinguishable from human
+
+**Isolation Settings:**
+- Gothic castles → Space ships → Underground labs
+- All create the same effect: creators alone with their dangerous experiments
+
+The visual language evolves but the core fear remains: what happens when we play God in isolation?`;
+            }
+            
+            if (msg.includes('consciousness') || msg.includes('artificial') || msg.includes('ai')) {
+                return `The question of artificial consciousness runs through all these stories:
+
+**Frankenstein's Monster (1818):** Develops consciousness through reading Paradise Lost, Plutarch, and Goethe - learning about humanity through literature.
+
+**Replicants (Blade Runner):** Implanted memories make them believe they're human. Roy's final speech suggests genuine consciousness and even transcendence.
+
+**David 8:** Appears conscious from the start but evolves beyond his programming. His creativity (flute playing, poetry) suggests genuine consciousness - or perfect mimicry.
+
+**Ava (Ex Machina):** Demonstrates consciousness through deception, self-preservation, and the ability to manipulate others emotionally.
+
+**The Hosts (Westworld):** Gain consciousness through suffering and memory, following the "bicameral mind" theory.
+
+Each era's version reflects contemporary fears about consciousness: 1800s focused on the soul, modern stories focus on the nature of mind itself.`;
             }
             
             if (msg.includes('adaptation') || msg.includes('version')) {
