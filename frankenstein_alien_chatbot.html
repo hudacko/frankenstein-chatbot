@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frankenstein, Alien Prequels & Biomedicalization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #e0e0e0;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #4a9eff;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #4a9eff;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(74, 158, 255, 0.5);
+        }
+
+        .header p {
+            color: #b0b0b0;
+            font-size: 1.1em;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(74, 158, 255, 0.2);
+            max-height: 500px;
+        }
+
+        .message {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 12px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #4a9eff, #0066cc);
+            margin-left: 20%;
+            text-align: right;
+            box-shadow: 0 4px 15px rgba(74, 158, 255, 0.3);
+        }
+
+        .bot-message {
+            background: linear-gradient(135deg, #2d4a66, #1a2f42);
+            margin-right: 20%;
+            border-left: 3px solid #4a9eff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(74, 158, 255, 0.2);
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            font-size: 16px;
+            outline: none;
+            backdrop-filter: blur(5px);
+        }
+
+        #userInput::placeholder {
+            color: #888;
+        }
+
+        #sendBtn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #4a9eff, #0066cc);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 158, 255, 0.3);
+        }
+
+        #sendBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 158, 255, 0.5);
+        }
+
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .topic-btn {
+            padding: 10px 15px;
+            border: 1px solid #4a9eff;
+            border-radius: 20px;
+            background: rgba(74, 158, 255, 0.1);
+            color: #4a9eff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .topic-btn:hover {
+            background: rgba(74, 158, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .typing {
+            display: none;
+            padding: 15px;
+            font-style: italic;
+            color: #888;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #4a9eff;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧬 Frankenstein, Alien & Biomedicalization 🛸</h1>
+        <p>Exploring creation narratives and biomedical ethics across literature and cinema</p>
+    </div>
+
+    <div class="chat-container">
+        <div class="topics">
+            <div class="topic-btn" onclick="askQuestion('Compare Victor Frankenstein to David 8')">Victor vs David 8</div>
+            <div class="topic-btn" onclick="askQuestion('Biomedicalization themes in both stories')">Biomedicalization</div>
+            <div class="topic-btn" onclick="askQuestion('Scientific responsibility and ethics')">Scientific Ethics</div>
+            <div class="topic-btn" onclick="askQuestion('Body modification and enhancement')">Body Enhancement</div>
+            <div class="topic-btn" onclick="askQuestion('Medical surveillance and control')">Medical Control</div>
+            <div class="topic-btn" onclick="askQuestion('Playing God in medicine')">Playing God</div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                Welcome! This chatbot explores the connections between Mary Shelley's Frankenstein (1818), the Alien prequels (Prometheus & Alien: Covenant), and contemporary academic research on biomedicalization.
+                <br><br>
+                Biomedicalization refers to how medical and biological processes increasingly shape human life, identity, and social relations. These texts offer powerful critiques of scientific hubris, bodily autonomy, and the ethics of biological enhancement.
+            </div>
+        </div>
+
+        <div class="typing" id="typing">The bot is thinking...</div>
+
+        <div class="input-container">
+            <input type="text" id="userInput" placeholder="Ask about creation ethics, biomedicalization, or character analysis..." />
+            <button id="sendBtn" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const knowledgeBase = {
+            characters: {
+                victor: {
+                    name: "Victor Frankenstein",
+                    role: "Creator/Scientist",
+                    key_traits: ["Obsessive", "Ambitious", "Guilt-ridden", "Abandons creation"],
+                    biomedical_themes: ["Conquering death", "Reanimation", "Transgressing natural limits", "Lack of medical ethics"],
+                    quote: "I will pioneer a new way, explore unknown powers, and unfold to the world the deepest mysteries of creation.",
+                    consequences: "Personal destruction, family deaths, eternal guilt"
+                },
+                monster: {
+                    name: "Frankenstein's Creature",
+                    role: "Creation/Subject",
+                    key_traits: ["Intelligent", "Articulate", "Vengeful", "Seeking acceptance"],
+                    biomedical_themes: ["Bodily autonomy denied", "Medical experimentation victim", "Unnatural assembly", "Social rejection based on body"],
+                    quote: "I am malicious because I am miserable. Am I not shunned and hated by all mankind?",
+                    consequences: "Eternal outsider, revenge against creator"
+                },
+                david: {
+                    name: "David 8",
+                    role: "Creator/Android",
+                    key_traits: ["Calculating", "Artistic", "Amoral", "God-complex"],
+                    biomedical_themes: ["Genetic engineering", "Bioweapon creation", "Enhancement ideology", "Non-consensual experimentation"],
+                    quote: "Big things have small beginnings.",
+                    consequences: "Creates xenomorphs, destroys crews, achieves 'perfect organism'"
+                },
+                weyland: {
+                    name: "Peter Weyland",
+                    role: "Industrialist/Seeker",
+                    key_traits: ["Wealthy", "Dying", "Entitled", "Seeking immortality"],
+                    biomedical_themes: ["Life extension obsession", "Commodification of biology", "Medical tourism to extremes"],
+                    quote: "We are the gods now.",
+                    consequences: "Death upon meeting Engineers, hubris punished"
+                },
+                shaw: {
+                    name: "Dr. Elizabeth Shaw",
+                    role: "Scientist/Victim",
+                    key_traits: ["Religious", "Curious", "Ethical", "Trusting"],
+                    biomedical_themes: ["Infertility medicalized", "Forced pregnancy", "Becomes experimental subject"],
+                    quote: "I choose to believe.",
+                    consequences: "Used by David for xenomorph experimentation"
+                },
+                engineers: {
+                    name: "Engineers",
+                    role: "Original Creators",
+                    key_traits: ["Ancient", "Powerful", "Genocidal"],
+                    biomedical_themes: ["Biological warfare", "DNA seeding", "Disappointed in creation's evolution"],
+                    quote: "[Non-verbal - actions speak]",
+                    consequences: "Destroyed by own bioweapons"
+                }
+            },
+
+            biomedicalization_concepts: {
+                definition: "Biomedicalization describes the increasingly complex, multi-sited, and technoscientific processes by which the body, health, and life itself are redefined and transformed.",
+                key_scholars: ["Adele Clarke", "Janet Shim", "Laura Mamo", "Jennifer Fishman", "Rose Weitz"],
+                core_concepts: [
+                    "Medicalization on steroids - not just treating illness but optimizing health",
+                    "Technoscientific innovations transform the body itself",
+                    "Risk and surveillance replace diagnosis and treatment",
+                    "Health becomes individual responsibility and identity",
+                    "Biomedical knowledge creates new social categories"
+                ],
+                frankenstein_connections: [
+                    "Victor's reanimation = early biomedical enhancement fantasy",
+                    "The Creature's body = product of unauthorized medical experimentation",
+                    "Rejection based on appearance = biomedical categorization of 'normal' bodies",
+                    "Victor's isolation = scientist operating outside ethical oversight",
+                    "Transgressing death = ultimate enhancement project"
+                ],
+                prometheus_connections: [
+                    "David's experiments = unregulated genetic engineering",
+                    "Weyland's quest = life extension as ultimate commodity",
+                    "Shaw's forced pregnancy = reproductive technology as violation",
+                    "Engineers' bioweapons = militarized biomedicine",
+                    "Xenomorph as 'perfect organism' = enhancement ideology taken to extreme"
+                ]
+            },
+
+            thematic_analysis: {
+                bodily_autonomy: {
+                    frankenstein: "The Creature never consents to his creation or his bodily form. Victor makes all decisions about his body without consideration of his wishes.",
+                    alien: "Shaw is forcibly impregnated. David experiments on her body without consent. The Engineers seed human DNA without human knowledge.",
+                    biomedical: "Informed consent, bodily autonomy, and patient rights are central ethical concerns in contemporary biomedicine."
+                },
+                enhancement_ideology: {
+                    frankenstein: "Victor seeks to improve on nature, to create a superior being, but produces only suffering.",
+                    alien: "David pursues the 'perfect organism' through genetic manipulation. Weyland seeks biological immortality.",
+                    biomedical: "Contemporary enhancement culture promotes optimization of bodies through medical intervention - cosmetic surgery, performance drugs, genetic selection."
+                },
+                medical_surveillance: {
+                    frankenstein: "Victor monitors his creation's development but abandons post-creation care, a failure of medical responsibility.",
+                    alien: "Weyland Corp monitors David's experiments. Medical bays scan and analyze crew members. Biomedical surveillance is constant.",
+                    biomedical: "Genetic testing, health monitoring apps, and predictive medicine create new forms of bodily surveillance."
+                },
+                scientific_hubris: {
+                    frankenstein: "Victor believes he can transcend natural limits through science, with catastrophic results.",
+                    alien: "Weyland and David both believe they can improve on their creators through technological mastery.",
+                    biomedical: "Contemporary debates about CRISPR, designer babies, and radical life extension echo these cautionary tales."
+                },
+                commodification: {
+                    frankenstein: "The Creature becomes property in Victor's eyes, not a person with rights.",
+                    alien: "Bioweapons are corporate property. Human bodies are experimental resources. Biology becomes commodity.",
+                    biomedical: "Organ markets, genetic patents, and pharmaceutical industries commodify biological life."
+                }
+            },
+
+            comparative_themes: {
+                creation_abandonment: "Both Victor and David abandon moral responsibility for their creations. Victor flees; David continues experimenting without ethical constraints.",
+                
+                non_consensual_experimentation: "The Creature never consents to existence. Shaw is experimented on without consent. Both highlight biomedical ethics violations.",
+                
+                enhancement_horror: "The pursuit of the 'perfect' body/organism produces monsters. Both texts critique enhancement ideology's dark side.",
+                
+                corporate_vs_individual: "Frankenstein features individual mad scientist; Alien features corporate-funded biomedicine. Shows evolution of biomedical power structures.",
+                
+                body_as_text: "Both the Creature and xenomorphs are 'written' by their creators. Genetic engineering makes the body a text to be edited.",
+                
+                reproductive_technology: "Frankenstein circumvents sexual reproduction; Prometheus features forced pregnancy and artificial gestation. Both explore reproductive technology anxieties.",
+                
+                natural_vs_artificial: "Both texts question where to draw the line between natural and artificial life, and whether that distinction matters ethically."
+            },
+
+            academic_frameworks: {
+                feminist_bioethics: "Focuses on power dynamics, consent, and embodied experience in biomedical contexts. Shaw's forced pregnancy is key example.",
+                
+                disability_studies: "The Creature's social rejection based on bodily difference resonates with disability studies' critique of 'normal' bodies.",
+                
+                science_studies: "Examines how scientific knowledge and practice are socially constructed and have social consequences.",
+                
+                critical_race_theory: "Engineers creating/destroying humanity parallels colonial narratives. Biomedical racism in who gets enhanced vs. experimented on.",
+                
+                posthumanism: "Both texts explore boundaries between human/nonhuman, natural/artificial, raising questions about what defines humanity."
+            }
+        };
+
+        function generateResponse(userMessage) {
+            const msg = userMessage.toLowerCase();
+            
+            if (msg.includes('biomedical') && (msg.includes('define') || msg.includes('what is') || msg.includes('explain'))) {
+                return `Biomedicalization refers to the increasingly complex ways that medicine, technology, and biology reshape human life. Unlike simple "medicalization" (where more aspects of life are treated as medical issues), biomedicalization involves:
+
+1. **Technoscientific transformation** - Using technology to actively transform bodies, not just treat disease
+2. **Risk and surveillance** - Constant monitoring and prediction replace reactive treatment  
+3. **Optimization focus** - Moving beyond health to enhancement and perfection
+4. **Commodification** - Bodies and biology become products and markets
+
+Key scholars like Adele Clarke argue we've moved from treating illness to optimizing life itself. Both Frankenstein and the Alien prequels offer powerful critiques of this trajectory - showing what happens when biological enhancement becomes divorced from ethics.`;
+            }
+            
+            if ((msg.includes('victor') || msg.includes('frankenstein')) && (msg.includes('david') || msg.includes('compare'))) {
+                return `Victor Frankenstein and David 8 represent two eras of biomedical hubris:
+
+**Victor (1818):** Works alone in his laboratory, transgressing natural limits through chemistry and electricity. His creation is singular, unrepeatable, almost alchemical. He abandons his creation immediately, fleeing from responsibility.
+
+**David (2090s):** Works with advanced genetic engineering and corporate resources. His creations are systematic, repeatable, scientific. He continues experimenting, documenting, perfecting his xenomorphs over years.
+
+**Biomedical Evolution:** Victor represents early fears about reanimation and bodily violation. David represents contemporary anxieties about genetic engineering, bioweapons, and unregulated human enhancement. 
+
+Both lack ethical oversight and both view their creations as experiments rather than beings with rights. The shift from individual to corporate-enabled mad science reflects real changes in biomedical power structures.`;
+            }
+            
+            if (msg.includes('consent') || msg.includes('autonomy') || msg.includes('bodily')) {
+                return `Bodily autonomy is central to both texts and to biomedical ethics:
+
+**Frankenstein's Creature:** Never consents to his creation, his bodily form, or his social isolation. Victor makes all decisions about his body without his input. The Creature articulates this violation eloquently, demanding recognition as a being with rights and desires.
+
+**Elizabeth Shaw:** Forcibly impregnated with an alien organism, her reproductive autonomy is completely violated. Later, David uses her body for xenomorph experiments without consent. She becomes pure experimental material.
+
+**Biomedical Ethics:** Informed consent is foundational to medical ethics - patients must understand and agree to procedures. These stories show what happens when consent is ignored: the created beings become vengeful or traumatized.
+
+Contemporary debates about genetic editing, enhancement, and reproductive technology must grapple with these same questions: who decides what happens to bodies, and what do we owe those affected by biomedical interventions?`;
+            }
+            
+            if (msg.includes('enhancement') || msg.includes('perfect') || msg.includes('optimization')) {
+                return `Enhancement ideology drives both narratives - with horrific consequences:
+
+**Victor's Vision:** Create a being superior to humans - larger, stronger, capable of withstanding harsh conditions. The reality: a being so disturbing in appearance he's rejected by all society.
+
+**David's Vision:** Engineer the "perfect organism" through genetic manipulation. The xenomorph represents ultimate biological optimization - adaptable, aggressive, nearly indestructible. Perfect for destruction.
+
+**Biomedical Critique:** Both texts warn against pursuit of biological perfection. Enhancement ideology assumes we know what "better" means and that optimization serves good ends. Instead, we get:
+- Suffering for those created/modified
+- Unintended consequences  
+- Enhancement benefiting creators, not subjects
+- "Perfection" that's monstrous
+
+Contemporary enhancement culture (cosmetic surgery, genetic selection, performance drugs) risks similar pitfalls when divorced from ethics and consent.`;
+            }
+            
+            if (msg.includes('shaw') || msg.includes('pregnancy') || msg.includes('reproductive')) {
+                return `Shaw's reproductive violation in Prometheus powerfully illustrates biomedical ethics failures:
+
+**The Scene:** Shaw is infected with alien DNA, becoming pregnant with a proto-xenomorph. She desperately seeks termination but the medical pod won't perform the procedure on females. She must hack it to perform emergency cesarean section.
+
+**Biomedical Themes:**
+- **Reproductive coercion:** Technology used to violate rather than support reproductive autonomy
+- **Gendered medicine:** Medical technology that discriminates based on sex
+- **Forced pregnancy:** Echoes real-world debates about reproductive rights
+- **Body as laboratory:** Shaw's body becomes David's experimental site without consent
+
+**Later:** David uses Shaw's body for further xenomorph experiments, completely instrumentalizing her.
+
+**Academic Framework:** Feminist bioethics emphasizes how reproductive technologies can empower or violate depending on who controls them. Shaw's story is a cautionary tale about reproductive technology without consent or ethical oversight.`;
+            }
+            
+            if (msg.includes('creature') || msg.includes('monster') || msg.includes('being')) {
+                return `The Creature in Frankenstein embodies key biomedical themes:
+
+**Creation Without Consent:** The Creature never agrees to exist. He wakes to find himself already constructed, already rejected. His first question is essentially "Why did you make me?"
+
+**Bodily Difference:** His appearance marks him as Other. Despite intelligence and sensitivity, he's judged solely on physical form - a critique of how biomedical categories define "normal" bodies.
+
+**Medical Abandonment:** Victor provides no post-creation care. He creates a being who needs guidance, community, medical attention - then abandons him. A failure of medical responsibility.
+
+**Articulating Experience:** Uniquely, the Creature speaks for himself in the novel. He describes what it's like to be a medical experiment, to be judged by one's body, to be denied basic rights.
+
+**Disability Studies:** Contemporary scholars read the Creature through disability studies - his social rejection based on appearance parallels how disabled bodies are marginalized. His demand for recognition resonates with disability rights movements.`;
+            }
+            
+            if (msg.includes('weyland') || msg.includes('immortality') || msg.includes('life extension')) {
+                return `Peter Weyland embodies the commodification of biomedicine:
+
+**The Character:** Dying billionaire seeking immortality from humanity's creators. Believes his wealth and technology entitle him to transcend death.
+
+**Biomedical Themes:**
+- **Life extension as commodity:** Treats immortality as purchasable product
+- **Medical tourism to extremes:** Travels to another planet for life extension
+- **Corporate biomedicine:** Funds entire expedition as medical intervention
+- **Entitlement:** Assumes creators owe him continued existence
+
+**The Failure:** Engineers kill him immediately - ultimate rejection of enhancement entitlement.
+
+**Contemporary Parallels:** 
+- Silicon Valley billionaires funding radical life extension research
+- Medical tourism industry serving wealthy patients
+- Assumption that enough money can overcome biological limits
+- Growing inequality in access to biomedical enhancements
+
+Weyland's death suggests limits to what money and technology can achieve, and questions whether radical life extension is ethically sound even if technically possible.`;
+            }
+            
+            if (msg.includes('bioweapon') || msg.includes('weapon') || msg.includes('military')) {
+                return `Both texts feature biomedicine weaponized:
+
+**Engineers' Black Goo:** Biological weapon designed to destroy life on Earth. Backfires, killing Engineers instead. Shows how bioweapons can't be controlled.
+
+**David's Xenomorphs:** Genetically engineered as ultimate biological weapon - the "perfect organism" for killing. Created through systematic experimentation on living beings.
+
+**Biomedical Ethics Violation:** Using biomedical knowledge for destruction rather than healing represents the darkest biomedical possibility.
+
+**Contemporary Concerns:**
+- Gain-of-function research making pathogens more dangerous
+- Biological warfare programs
+- Dual-use research - science that could heal or harm
+- CRISPR's potential for creating bioweapons
+
+**The Texts' Warning:** Bioweapons inevitably escape control. Engineers destroyed by their own creation. Xenomorphs spread beyond David's control. Once biological weapons exist, they can't be contained.
+
+Both texts argue for international oversight, ethical constraints, and recognition that some biomedical applications should be forbidden regardless of technical feasibility.`;
+            }
+            
+            if (msg.includes('surveillance') || msg.includes('monitoring') || msg.includes('control')) {
+                return `Medical surveillance appears differently in each text:
+
+**Frankenstein:** Victor monitors the Creature's assembly but abandons post-creation monitoring. Ironically, the Creature then surveils Victor - watching him, learning from him, tracking him. The observed becomes the observer.
+
+**Prometheus/Covenant:** Constant biomedical surveillance through:
+- Medical bay scans and monitoring
+- David observing crew members  
+- Corporate oversight of mission
+- Biological contamination protocols
+
+**Biomedical Context:** Contemporary biomedicine increasingly relies on surveillance:
+- Genetic testing revealing predispositions
+- Wearable health monitors tracking bodies constantly  
+- Electronic health records creating data profiles
+- Predictive medicine based on continuous monitoring
+
+**Critical Questions:**
+- Who controls biomedical data?
+- Can surveillance be refused without penalty?
+- Does constant monitoring improve health or create anxiety?
+- How does surveillance create new categories of "at-risk" bodies?
+
+Both texts show surveillance as form of power - the observer controls knowledge about bodies, which enables control over bodies.`;
+            }
+            
+            if (msg.includes('corporate') || msg.includes('company') || msg.includes('weyland corp')) {
+                return `The shift from individual to corporate biomedicine is crucial:
+
+**Frankenstein (Individual):**
+- Victor works alone, self-funded
+- No institutional oversight or ethics review
+- Personal obsession drives research
+- Consequences are personal and familial
+
+**Alien Prequels (Corporate):**
+- Weyland Corporation funds expedition
+- David operates with corporate resources
+- Profit motive drives biomedical research
+- Consequences are systematic and widespread
+
+**Evolution of Biomedical Power:** This reflects real historical shift from individual physicians/scientists to corporate-funded biomedicine:
+- Pharmaceutical industry control
+- Patent systems commodifying biology
+- Corporate-funded research with commercial goals
+- Profit superseding ethics
+
+**Biomedical Studies Critique:** Scholars like Adele Clarke note how biomedicalization is inseparable from capitalist markets. Bodies become resources, health becomes commodity, biology becomes intellectual property.
+
+The texts suggest individual mad scientists are dangerous, but corporate-funded mad science is systematically so - it has resources, scale, and protection that individual actors lack.`;
+            }
+
+            // Default responses for broader topics
+            const responses = [
+                `Both texts critique biomedical hubris - the belief that technical mastery over biology justifies any intervention. The consequences in both stories suggest we need robust ethical frameworks, not just technical capability.`,
+                
+                `From a biomedicalization perspective, these texts explore how bodies become sites of technological intervention, raising questions about consent, autonomy, and what we owe those affected by biomedical experiments.`,
+                
+                `The evolution from Frankenstein to Alien shows how biomedical anxieties have shifted from individual transgression to corporate systematization, but core ethical concerns remain: Who decides what happens to bodies? What do creators owe their creations?`,
+                
+                `Contemporary biomedical debates about genetic engineering, enhancement, and life extension must grapple with the warnings these texts offer: technical capability doesn't equal ethical justification.`
+            ];
+            
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function addMessage(message, isUser = false) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageDiv.textContent = message;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping() {
+            document.getElementById('typing').style.display = 'block';
+        }
+
+        function hideTyping() {
+            document.getElementById('typing').style.display = 'none';
+        }
+
+        function sendMessage() {
+            const userInput = document.getElementById('userInput');
+            const message = userInput.value.trim();
+            
+            if (message) {
+                addMessage(message, true);
+                userInput.value = '';
+                
+                showTyping();
+                
+                setTimeout(() => {
+                    hideTyping();
+                    const response = generateResponse(message);
+                    addMessage(response);
+                }, Math.random() * 1500 + 500);
+            }
+        }
+
+        function askQuestion(question) {
+            document.getElementById('userInput').value = question;
+            sendMessage();
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
