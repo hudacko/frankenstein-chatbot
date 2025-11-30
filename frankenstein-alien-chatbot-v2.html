@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator & Creation: A Literary Dialogue</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e14;
+            --bg-secondary: #151922;
+            --bg-tertiary: #1a1f2e;
+            --accent-teal: #4ecdc4;
+            --accent-coral: #ff6b6b;
+            --accent-gold: #ffd93d;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a0a0a0;
+            --text-dim: #6b7280;
+            --border: rgba(78, 205, 196, 0.2);
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Animated background effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(78, 205, 196, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.03) 0%, transparent 50%);
+            animation: drift 30s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(5%, 5%) rotate(3deg); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-teal), var(--accent-coral));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .intro {
+            background: var(--bg-secondary);
+            border-left: 3px solid var(--accent-teal);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .chat-container {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .message {
+            display: flex;
+            gap: 1rem;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-gold));
+            color: var(--bg-primary);
+        }
+
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, var(--accent-teal), #6c63ff);
+            color: var(--bg-primary);
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            font-size: 1.05rem;
+        }
+
+        .message.user .message-content {
+            background: var(--bg-tertiary);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .message.assistant .message-content {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+        }
+
+        .message.assistant.thinking .message-content {
+            font-style: italic;
+            color: var(--text-dim);
+            border-style: dashed;
+        }
+
+        /* Markdown formatting styles */
+        .message-content h1,
+        .message-content h2,
+        .message-content h3 {
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+            color: var(--accent-teal);
+        }
+
+        .message-content h1 {
+            font-size: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .message-content h2 {
+            font-size: 1.3rem;
+        }
+
+        .message-content h3 {
+            font-size: 1.15rem;
+        }
+
+        .message-content p {
+            margin-bottom: 1rem;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-content ul,
+        .message-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .message-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .message-content strong {
+            font-weight: 600;
+            color: var(--accent-coral);
+        }
+
+        .message-content em {
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .message-content code {
+            background: var(--bg-primary);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .message-content blockquote {
+            border-left: 3px solid var(--accent-teal);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .input-area {
+            padding: 1.5rem;
+            background: var(--bg-tertiary);
+            border-top: 1px solid var(--border);
+        }
+
+        .quick-topics {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .topic-btn {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .topic-btn:hover {
+            background: var(--accent-teal);
+            color: var(--bg-primary);
+            border-color: var(--accent-teal);
+            transform: translateY(-2px);
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 1rem;
+        }
+
+        #userInput {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            color: var(--text-primary);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        #userInput:focus {
+            border-color: var(--accent-teal);
+        }
+
+        #sendBtn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent-teal), #6c63ff);
+            border: none;
+            border-radius: 24px;
+            color: var(--bg-primary);
+            font-family: 'Space Mono', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #sendBtn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        #sendBtn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: var(--accent-teal);
+            border-radius: 4px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-coral);
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            font-family: 'Space Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 768px) {
+            .message-content {
+                max-width: 85%;
+            }
+
+            .quick-topics {
+                justify-content: center;
+            }
+
+            .input-wrapper {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Creator & Creation</h1>
+            <p class="subtitle">Biomedicalization & Science Fiction</p>
+        </header>
+
+        <div class="intro">
+            <p>Welcome to an exploration of creator-creation narratives through the lens of biomedicalization. This chatbot examines how Mary Shelley's <em>Frankenstein</em> and the <em>Alien</em> prequels reflect anxieties about medical authority, bodily autonomy, and the increasing technologization of life itself. Through discussions of scientific hubris, abandonment, and the complex relationships between makers and their creations, we explore how biomedicalization—the transformation of human life processes through biotechnology and medical intervention—shapes both Gothic literature and contemporary science fiction.</p>
+        </div>
+
+        <div class="chat-container">
+            <div class="messages scrollbar-custom" id="messages">
+                <div class="message assistant">
+                    <div class="message-avatar">AI</div>
+                    <div class="message-content">
+                        Hello! I'm here to discuss the fascinating connections between Frankenstein and modern science fiction, particularly the Alien franchise. I have access to the full text of Frankenstein and several academic papers on these themes. What would you like to explore?
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <div class="quick-topics">
+                    <button class="topic-btn" onclick="sendQuickMessage('Compare Victor Frankenstein and David 8')">Victor vs David</button>
+                    <button class="topic-btn" onclick="sendQuickMessage('Discuss themes of abandonment')">Abandonment</button>
+                    <button class="topic-btn" onclick="sendQuickMessage('Scientific hubris in both works')">Scientific Hubris</button>
+                    <button class="topic-btn" onclick="sendQuickMessage('The Creature and the Xenomorph')">Creations</button>
+                    <button class="topic-btn" onclick="sendQuickMessage('Prometheus mythology connections')">Prometheus</button>
+                </div>
+
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="userInput" 
+                        placeholder="Ask about themes, characters, or connections..."
+                        onkeypress="handleKeyPress(event)"
+                    >
+                    <button id="sendBtn" onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Powered by Claude AI • Exploring Gothic Literature, Science Fiction & Biomedicalization</p>
+        </footer>
+    </div>
+
+    <script>
+        // Store conversation history
+        let conversationHistory = [];
+
+        // Document context to provide to Claude
+        const documentContext = `You are a knowledgeable assistant discussing the thematic connections between Mary Shelley's Frankenstein and modern science fiction, particularly the Alien franchise prequels (Prometheus and Alien: Covenant). 
+
+You have access to:
+- The full text of Frankenstein by Mary Shelley
+- Academic papers on creator-creation narratives
+- Information about the Alien franchise prequels
+
+Key themes to discuss:
+- Scientific hubris and the dangers of unchecked ambition
+- Abandonment and its consequences
+- The complex relationship between creator and creation
+- Revenge and justice
+- The role of the Prometheus myth in both works
+- Existential questions about purpose and identity
+
+Key characters for comparison:
+- Victor Frankenstein and David 8 (creators)
+- The Creature and the Xenomorphs (creations)
+- Weyland and his relationship to David
+
+Please provide thoughtful, detailed responses that draw connections between these works. Use specific examples from the texts when relevant. Be engaging and help the user explore these literary and cinematic themes deeply.`;
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to display
+            addMessage('user', message);
+            input.value = '';
+            
+            // Disable send button while processing
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            
+            // Add thinking indicator
+            const thinkingId = addMessage('assistant', 'Thinking...', true);
+            
+            try {
+                // Add user message to conversation history
+                conversationHistory.push({
+                    role: 'user',
+                    content: message
+                });
+                
+                // Call Claude API
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 2000,
+                        system: documentContext,
+                        messages: conversationHistory
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const assistantMessage = data.content[0].text;
+                
+                // Add assistant response to conversation history
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: assistantMessage
+                });
+                
+                // Remove thinking indicator and add real response
+                removeMessage(thinkingId);
+                addMessage('assistant', assistantMessage);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                removeMessage(thinkingId);
+                addMessage('assistant', 'I apologize, but I encountered an error. Please try again. (Note: This chatbot requires an internet connection and the Claude API to function.)');
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+
+        function addMessage(type, content, isThinking = false) {
+            const messagesDiv = document.getElementById('messages');
+            const messageId = 'msg-' + Date.now();
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}${isThinking ? ' thinking' : ''}`;
+            messageDiv.id = messageId;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = type === 'user' ? 'YOU' : 'AI';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            // For assistant messages (not thinking), render markdown
+            if (type === 'assistant' && !isThinking) {
+                contentDiv.innerHTML = marked.parse(content);
+            } else {
+                contentDiv.textContent = content;
+            }
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(contentDiv);
+            messagesDiv.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            return messageId;
+        }
+
+        function removeMessage(messageId) {
+            const message = document.getElementById(messageId);
+            if (message) {
+                message.remove();
+            }
+        }
+
+        function sendQuickMessage(message) {
+            document.getElementById('userInput').value = message;
+            sendMessage();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
